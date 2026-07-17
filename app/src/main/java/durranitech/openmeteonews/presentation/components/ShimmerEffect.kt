@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-/** Produces the animated shimmer brush — reuse across all shimmer boxes. */
 @Composable
 fun shimmerBrush(): Brush {
     val shimmerColors = listOf(

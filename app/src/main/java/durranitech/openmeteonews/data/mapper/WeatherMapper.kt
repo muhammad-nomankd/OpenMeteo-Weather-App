@@ -35,8 +35,6 @@ fun WeatherResponseDto.toDomain(): Weather {
 		windGusts = current.windGusts,
 	)
 
-	// Hourly: Open-Meteo returns 168 hours (7 days). We only show the
-	// next 24 from now to keep the UI focused.
 	val hourlyItems = hourly.time.indices.map { i ->
 		HourlyWeather(
 			time = hourly.time[i].formatHourDisplay(),

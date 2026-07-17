@@ -20,8 +20,6 @@ interface WeatherApiService {
 	): WeatherResponseDto
 
 	companion object {
-		// Comma-separated variable lists — these drive which fields Open-Meteo returns.
-		// Changing these also requires updating the DTOs.
 		const val CURRENT_VARIABLES =
 			"temperature_2m,relative_humidity_2m,apparent_temperature," +
 					"is_day,precipitation,rain,showers,snowfall,weather_code," +

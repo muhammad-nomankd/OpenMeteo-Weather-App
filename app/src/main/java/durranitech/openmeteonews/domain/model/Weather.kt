@@ -1,16 +1,5 @@
 package durranitech.openmeteonews.domain.model
-
 import androidx.compose.runtime.Immutable
-
-/**
- * Domain models are @Immutable so Compose's skipping optimization applies —
- * Compose can skip recomposition for any composable that receives these
- * types when nothing in them has changed.
- *
- * These are intentionally separate from DTOs. DTOs mirror the wire format;
- * domain models mirror what the UI actually needs. This layer insulates
- * the UI from any future API shape changes.
- */
 
 @Immutable
 data class Weather(

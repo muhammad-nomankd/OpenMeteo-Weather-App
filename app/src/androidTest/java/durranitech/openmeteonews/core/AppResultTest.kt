@@ -1,0 +1,2 @@
+package durranitech.openmeteonews.core
+

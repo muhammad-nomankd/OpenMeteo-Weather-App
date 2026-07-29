@@ -29,7 +29,7 @@ fun AppNavigation() {
 
 				WeatherHomeScreen(
 					uiState = uiState.value,
-					onIntent = viewModel::onIntent,
+					onIntent = {viewModel.onIntent(it)},
 					startLat = startLat,
 					startLon = startLon,
 					onDayClick = { index ->

@@ -74,7 +74,7 @@ fun WeatherResponseDto.toDomain(): Weather {
 	)
 }
 
-// ─── Private helpers ─────────────────────────────────────────────────────────
+// Private helpers
 
 /** "2024-07-01T14:00" → "2:00 PM" */
 @RequiresApi(Build.VERSION_CODES.O)

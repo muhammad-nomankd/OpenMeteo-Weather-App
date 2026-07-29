@@ -15,7 +15,6 @@ import okio.IOException
 import retrofit2.HttpException
 import java.net.UnknownHostException
 import javax.inject.Inject
-
 class OpenMeteoRepositoryImp @Inject constructor(private val apiService: WeatherApiService) :
 	OpenMeteoRepository {
 	@RequiresApi(Build.VERSION_CODES.O)
@@ -37,6 +36,7 @@ class OpenMeteoRepositoryImp @Inject constructor(private val apiService: Weather
 		} catch (e: HttpException) {
 			val message = when (e.code()) {
 				400 -> "Bad request - check coordinates."
+				408 -> "Request time out"
 				429 -> "Rate limit exceeded"
 				500 -> "Server error"
 				503 -> "Service unavailable"

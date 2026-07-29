@@ -14,6 +14,11 @@ android {
 			minorApiLevel = 1
 		}
 	}
+	tasks.withType<Test>().configureEach {
+		testLogging {
+			events("passed", "failed", "skipped")
+		}
+	}
 
 	defaultConfig {
 		applicationId = "durranitech.openmeteonews"
@@ -43,6 +48,9 @@ android {
 
 dependencies {
 	implementation(libs.androidx.activity.compose)
+	val bom = platform(libs.androidx.compose.bom.v20240900)
+	implementation(bom)
+	debugImplementation(bom)
 	implementation(libs.androidx.compose.material3)
 	implementation(libs.androidx.compose.ui)
 	implementation(libs.androidx.compose.ui.graphics)
@@ -51,7 +59,13 @@ dependencies {
 	implementation(libs.androidx.lifecycle.runtime.ktx)
 	implementation(libs.androidx.navigation3.runtime)
 	implementation(libs.androidx.navigation3.ui)
+	// Testing
+	androidTestImplementation(bom)
 	testImplementation(libs.junit)
+	testImplementation(libs.mockk)
+	testImplementation(libs.turbine)
+	testImplementation(libs.kotlinx.coroutines.test)
+
 	androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 	androidTestImplementation(libs.androidx.espresso.core)
 	androidTestImplementation(libs.androidx.junit)
@@ -84,23 +98,7 @@ dependencies {
 	//Material Icons
 	implementation(libs.androidx.compose.material.icons.extended)
 
+	testImplementation(libs.junit)
 	//Splash Screen
 	implementation(libs.androidx.core.splashscreen)
-
-	//
-	implementation(platform(libs.androidx.compose.bom.v20240900))
-
-	// JUnit — the testing framework itself. Provides @Test, assertEquals, assertTrue
-	testImplementation(libs.junit)
-
-    // MockK — creates fake versions of your classes (called "mocks")
-	testImplementation(libs.mockk)
-
-    // Turbine — makes testing Flow emissions easy (collect, awaitItem, etc.)
-	testImplementation(libs.turbine)
-
-    // Coroutines Test — lets you control time in coroutine tests
-	testImplementation(libs.kotlinx.coroutines.test)
-
-
 }

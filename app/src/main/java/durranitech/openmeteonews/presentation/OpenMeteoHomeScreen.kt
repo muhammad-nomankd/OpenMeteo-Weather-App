@@ -1,12 +1,11 @@
 package durranitech.openmeteonews.presentation
+
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -48,24 +47,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import durranitech.openmeteonews.presentation.components.WeatherStatCard
-import durranitech.openmeteonews.domain.model.WeatherCondition
-import durranitech.openmeteonews.presentation.components.HourlyForecastRow
-import durranitech.openmeteonews.presentation.components.OpenMeteoDailyForecastItem
-import durranitech.openmeteonews.presentation.components.WeatherScreenSkeleton
-import androidx.compose.ui.tooling.preview.Preview
 import durranitech.openmeteonews.domain.model.CurrentWeather
 import durranitech.openmeteonews.domain.model.DailyForecast
 import durranitech.openmeteonews.domain.model.HourlyWeather
 import durranitech.openmeteonews.domain.model.Weather
+import durranitech.openmeteonews.domain.model.WeatherCondition
+import durranitech.openmeteonews.presentation.components.HourlyForecastRow
+import durranitech.openmeteonews.presentation.components.OpenMeteoDailyForecastItem
+import durranitech.openmeteonews.presentation.components.WeatherScreenSkeleton
+import durranitech.openmeteonews.presentation.components.WeatherStatCard
 import durranitech.openmeteonews.ui.theme.OpenMeteoNewsTheme
 
 
@@ -81,7 +81,7 @@ fun WeatherHomeScreen(
 	LaunchedEffect(startLat, startLon) {
 		onIntent(OpenMeteoWeatherIntent.LoadWeather(startLat, startLon))
 	}
-	
+
 
 	val snackbarHostState = remember { SnackbarHostState() }
 
@@ -127,12 +127,22 @@ fun WeatherHomeScreen(
 			) { isLoading ->
 				if (isLoading) {
 					WeatherScreenSkeleton(
-						modifier = Modifier.fillMaxSize().statusBarsPadding(),
+						modifier = Modifier
+							.fillMaxSize()
+							.statusBarsPadding()
+							.testTag("shimmer_skeleton"),
 					)
 				} else if (uiState.isTerminalError) {
 					TerminalErrorState(
 						message = uiState.errorMessage ?: "Unknown error",
-						onRetry = { onIntent(OpenMeteoWeatherIntent.LoadWeather(startLat, startLon)) },
+						onRetry = {
+							onIntent(
+								OpenMeteoWeatherIntent.LoadWeather(
+									startLat,
+									startLon
+								)
+							)
+						},
 						modifier = Modifier.fillMaxSize(),
 					)
 				} else if (uiState.hasData) {
@@ -148,8 +158,8 @@ fun WeatherHomeScreen(
 			UnitToggle(
 				unit = uiState.unit,
 				onToggle = {
-					val next = if (uiState.unit == TemperatureUnit.CELSIUS)
-						TemperatureUnit.FAHRENHEIT else TemperatureUnit.CELSIUS
+					val next =
+						if (uiState.unit == TemperatureUnit.CELSIUS) TemperatureUnit.FAHRENHEIT else TemperatureUnit.CELSIUS
 					onIntent(OpenMeteoWeatherIntent.ChangeTemperatureUnit(next))
 				},
 				modifier = Modifier
@@ -161,7 +171,9 @@ fun WeatherHomeScreen(
 
 		SnackbarHost(
 			hostState = snackbarHostState,
-			modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding(),
+			modifier = Modifier
+				.align(Alignment.BottomCenter)
+				.navigationBarsPadding(),
 		)
 	}
 }
@@ -183,7 +195,7 @@ private fun WeatherContent(
 
 
 	val animatedTemp by animateFloatAsState(
-		targetValue = if (visible)current.temperature.toFloat() else 0f,
+		targetValue = if (visible) current.temperature.toFloat() else 0f,
 		animationSpec = spring(Spring.DampingRatioNoBouncy),
 		label = "temperature",
 	)
@@ -210,7 +222,7 @@ private fun WeatherContent(
 							modifier = Modifier.size(16.dp),
 						)
 						Text(
-							text = uiState.locationLabel?:"",
+							text = uiState.locationLabel ?: "",
 							style = MaterialTheme.typography.titleMedium,
 							color = Color.White.copy(alpha = 0.9f),
 						)
@@ -250,7 +262,9 @@ private fun WeatherContent(
 		item {
 			Spacer(Modifier.height(32.dp))
 			Row(
-				modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(horizontal = 24.dp),
 				horizontalArrangement = Arrangement.spacedBy(10.dp),
 			) {
 				WeatherStatCard(
@@ -300,7 +314,9 @@ private fun WeatherContent(
 			item {
 				Spacer(Modifier.height(20.dp))
 				Row(
-					modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+					modifier = Modifier
+						.fillMaxWidth()
+						.padding(horizontal = 24.dp),
 					horizontalArrangement = Arrangement.spacedBy(10.dp),
 				) {
 					WeatherStatCard(
@@ -365,7 +381,9 @@ private fun SectionHeader(title: String, modifier: Modifier = Modifier) {
 		style = MaterialTheme.typography.titleSmall,
 		fontWeight = FontWeight.SemiBold,
 		color = Color.White.copy(alpha = 0.7f),
-		modifier = modifier.fillMaxWidth().padding(horizontal = 24.dp),
+		modifier = modifier
+			.fillMaxWidth()
+			.padding(horizontal = 24.dp),
 	)
 }
 
@@ -379,7 +397,8 @@ private fun UnitToggle(
 	IconButton(
 		onClick = onToggle,
 		modifier = modifier.semantics {
-			contentDescription = "Switch to ${if (unit == TemperatureUnit.CELSIUS) "Fahrenheit" else "Celsius"}"
+			contentDescription =
+				"Switch to ${if (unit == TemperatureUnit.CELSIUS) "Fahrenheit" else "Celsius"}"
 		},
 	) {
 		Text(text = label, fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
@@ -389,61 +408,56 @@ private fun UnitToggle(
 @Preview(showBackground = true)
 @Composable
 private fun WeatherHomeScreenPreview() {
-	val mockWeather = Weather(
-		latitude = 34.01,
-		longitude = 71.97,
-		timezone = "GMT",
-		current = CurrentWeather(
-			time = "7pm",
-			temperature = 25.5,
-			apparentTemperature = 27.0,
-			humidity = 45,
-			precipitation = 0.0,
-			weatherCode = 0,
-			condition = WeatherCondition.RainShowers,
-			isDay = true,
-			cloudCover = 10,
-			surfacePressure = 1013.0,
-			windSpeed = 12.0,
-			windDirection = 180,
-			windGusts = 15.0
-		),
-		hourly = List(24) { hour ->
-			HourlyWeather(
-				time = "2023-10-10T${hour.toString().padStart(2, '0')}:00",
-				temperature = 20.0 + hour % 10,
-				precipitationProbability = hour * 2 % 100,
-				weatherCode = 1,
-				condition = WeatherCondition.MainlyClear,
-				windSpeed = 10.0,
-				humidity = 50
-			)
-		},
-		daily = List(7) { day ->
-			DailyForecast(
-				date = "2023-10-1${0 + day}",
-				dayLabel = when (day) {
-					0 -> "Today"
-					1 -> "Mon"
-					2 -> "Tue"
-					3 -> "Wed"
-					4 -> "Thu"
-					5 -> "Fri"
-					else -> "Sat"
-				},
+	val mockWeather =
+		Weather(
+			latitude = 34.01, longitude = 71.97, timezone = "GMT", current = CurrentWeather(
+				time = "7pm",
+				temperature = 25.5,
+				apparentTemperature = 27.0,
+				humidity = 45,
+				precipitation = 0.0,
 				weatherCode = 0,
-				condition = if (day % 2 == 0) WeatherCondition.ClearDay else WeatherCondition.PartlyCloudy,
-				tempMax = 28.0 - day,
-				tempMin = 18.0 + day,
-				sunrise = "06:15",
-				sunset = "18:45",
-				precipitationSum = 0.0,
-				precipitationProbabilityMax = 10 * day,
-				windSpeedMax = 15.0,
-				uvIndexMax = 6.0
-			)
-		}
-	)
+				condition = WeatherCondition.RainShowers,
+				isDay = true,
+				cloudCover = 10,
+				surfacePressure = 1013.0,
+				windSpeed = 12.0,
+				windDirection = 180,
+				windGusts = 15.0
+			), hourly = List(24) { hour ->
+				HourlyWeather(
+					time = "2023-10-10T${hour.toString().padStart(2, '0')}:00",
+					temperature = 20.0 + hour % 10,
+					precipitationProbability = hour * 2 % 100,
+					weatherCode = 1,
+					condition = WeatherCondition.MainlyClear,
+					windSpeed = 10.0,
+					humidity = 50
+				)
+			}, daily = List(7) { day ->
+				DailyForecast(
+					date = "2023-10-1${0 + day}",
+					dayLabel = when (day) {
+						0 -> "Today"
+						1 -> "Mon"
+						2 -> "Tue"
+						3 -> "Wed"
+						4 -> "Thu"
+						5 -> "Fri"
+						else -> "Sat"
+					},
+					weatherCode = 0,
+					condition = if (day % 2 == 0) WeatherCondition.ClearDay else WeatherCondition.PartlyCloudy,
+					tempMax = 28.0 - day,
+					tempMin = 18.0 + day,
+					sunrise = "06:15",
+					sunset = "18:45",
+					precipitationSum = 0.0,
+					precipitationProbabilityMax = 10 * day,
+					windSpeedMax = 15.0,
+					uvIndexMax = 6.0
+				)
+			})
 
 	val mockUiState = OpenMeteoWeatherUiState(
 		isLoading = false,
@@ -458,7 +472,6 @@ private fun WeatherHomeScreenPreview() {
 			onIntent = {},
 			startLat = 34.01,
 			startLon = 71.97,
-			onDayClick = {}
-		)
+			onDayClick = {})
 	}
 }

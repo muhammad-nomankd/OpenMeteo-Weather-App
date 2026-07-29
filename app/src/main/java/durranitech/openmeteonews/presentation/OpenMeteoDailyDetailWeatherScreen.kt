@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -125,7 +126,7 @@ fun OpenMeteoDailyForecastScreen(
 						modifier = Modifier.weight(1f),
 						textAlign = TextAlign.Center,
 					)
-					
+
 					// Balance the back button so the title is truly centred
 					Spacer(Modifier.size(48.dp))
 				}
@@ -211,7 +212,8 @@ fun OpenMeteoDailyForecastScreen(
 				) {
 					UvIndexBar(
 						uvIndex = day.uvIndexMax,
-						modifier = Modifier.padding(horizontal = 20.dp),
+						modifier = Modifier
+							.padding(horizontal = 20.dp),
 					)
 				}
 				Spacer(Modifier.height(40.dp))
@@ -255,9 +257,10 @@ private fun TempRangeArc(
 			) {
 				Column(horizontalAlignment = Alignment.CenterHorizontally) {
 					Text(
-						text = "Low",
+						text = " Low",
 						style = MaterialTheme.typography.labelSmall,
 						color = coldColor,
+						modifier = Modifier.testTag("TempLevel")
 					)
 					Text(
 						text = tempMin.formatTemp(unit),
@@ -506,18 +509,21 @@ private fun UvIndexBar(
 			)
 			Row(
 				verticalAlignment = Alignment.CenterVertically,
-				horizontalArrangement = Arrangement.spacedBy(6.dp),
+				horizontalArrangement = Arrangement.spacedBy(6.dp)
 			) {
 				Text(
 					text = uvIndex.toInt().toString(),
 					style = MaterialTheme.typography.bodyLarge,
 					fontWeight = FontWeight.Bold,
 					color = uvColor,
+					modifier = Modifier.testTag("UV Index")
 				)
 				Text(
 					text = uvLevel,
 					style = MaterialTheme.typography.labelSmall,
 					color = uvColor.copy(alpha = 0.8f),
+					modifier = Modifier.testTag("UvLevel"),
+
 				)
 			}
 		}

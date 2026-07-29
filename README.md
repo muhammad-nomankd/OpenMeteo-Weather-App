@@ -7,8 +7,10 @@ Built as a portfolio project demonstrating Modern Android Development (MAD) best
 ---
 
 ## 📸 Screenshots
+<img width="376" height="842" alt="image" src="https://github.com/user-attachments/assets/96b3fb0b-30af-4dac-933c-e9a327987d70" />
 
 
+<img width="371" height="842" alt="image" src="https://github.com/user-attachments/assets/07360d86-4aaf-4054-82da-2fb8fede35f6" />
 
 ## ✨ Features
 
